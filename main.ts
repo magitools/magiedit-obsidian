@@ -37,6 +37,7 @@ export default class MyPlugin extends Plugin {
 					new Notice(`this is the list of publishers selected : ${Object.keys(ev).join(',')}`)
 					const title = view.file?.name.replace('.md', '')
 					const value = editor.getValue()
+					new Notice('Publishing article...')
 					const res = await ofetch(`${this.settings.url}/api/publishers/publish`, {
 						headers: {
 							'Authorization': `Bearer ${this.settings.api_key}`
@@ -59,6 +60,8 @@ export default class MyPlugin extends Plugin {
 					console.log(allValid)
 					if (allValid) {
 						new Notice('The selected file has been published with all selected publishers')
+					} else {
+						new Notice('Not all publishers worked, sorry')
 					}
 				}).open()
 			}
