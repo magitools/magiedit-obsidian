@@ -34,7 +34,6 @@ export default class MyPlugin extends Plugin {
 				})
 				//TODO add title to frontmatter if not already available
 				new PublisherSelectModal(this.app, publishers, async (ev: Record<string, any>) => {
-					new Notice(`this is the list of publishers selected : ${Object.keys(ev).join(',')}`)
 					const title = view.file?.name.replace('.md', '')
 					const value = editor.getValue()
 					new Notice('Publishing article...')
