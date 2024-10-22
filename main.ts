@@ -20,13 +20,6 @@ export default class MyPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
-		});
-		// Perform additional things with the ribbon
-		ribbonIconEl.addClass('my-plugin-ribbon-class');
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new MagieditSettingTab(this.app, this));
 
@@ -39,17 +32,37 @@ export default class MyPlugin extends Plugin {
 						'Authorization': `Bearer ${this.settings.api_key}`
 					}
 				})
-				new PublisherSelectModal(this.app, publishers, (ev: Record<string, any>) => {
+				//TODO add title to frontmatter if not already available
+				new PublisherSelectModal(this.app, publishers, async (ev: Record<string, any>) => {
 					new Notice(`this is the list of publishers selected : ${Object.keys(ev).join(',')}`)
-					const title = editor
+					const title = view.file?.name.replace('.md', '')
 					const value = editor.getValue()
-					console.log(value)
+					const res = await ofetch(`${this.settings.url}/api/publishers/publish`, {
+						headers: {
+							'Authorization': `Bearer ${this.settings.api_key}`
+						},
+						method: 'POST',
+						body: {
+							'content': value,
+							'publishers': Object.keys(ev)
+						}
+					})
+					let allValid = true
+					console.log(res)
+					const values = Object.values(res.status)
+					for (let i = 0; i < values.length; i++) {
+						allValid = values[i] as boolean
+						if (!allValid) {
+							break
+						}
+					}
+					console.log(allValid)
+					if (allValid) {
+						new Notice('The selected file has been published with all selected publishers')
+					}
 				}).open()
 			}
 		})
-
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
 	onunload() {
@@ -77,18 +90,18 @@ export class PublisherSelectModal extends Modal {
 
 	constructor(app: App, publishers: Array<Publisher>, onSubmit: (data: Record<string, string>) => void) {
 		super(app)
-		const selectedPublishers = {}
+		const selectedPublishers: Record<string, any> = {}
 		const itemList = this.contentEl.createDiv()
 
 		new Setting(this.contentEl)
 			.addDropdown((dropdown) => {
-				dropdown.addOption(-1, "Select at least a publisher")
+				dropdown.addOption("-1", "Select at least a publisher")
 				publishers.forEach((el) => {
 					dropdown.addOption(String(el.id), el.name)
 				})
 				dropdown.onChange((value) => {
 					const container = itemList.createEl('div')
-					container.createEl('div', { text: publishers.find((e) => e.id == value)?.name })
+					container.createEl('div', { text: publishers.find((e) => String(e.id) == value)?.name })
 					selectedPublishers[value] = container
 				})
 			})
