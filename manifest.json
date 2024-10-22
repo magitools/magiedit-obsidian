@@ -3,9 +3,8 @@
 	"name": "Magiedit",
 	"version": "0.0.1",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
+	"description": "Official plugin to interact with Magiedit's API",
 	"author": "Matteo Gassend",
 	"authorUrl": "https://matteogassend.com",
-	"fundingUrl": "https://obsidian.md/pricing",
 	"isDesktopOnly": false
 }
