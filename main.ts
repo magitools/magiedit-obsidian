@@ -48,7 +48,6 @@ export default class MyPlugin extends Plugin {
 						}
 					})
 					let allValid = true
-					console.log(res)
 					const values = Object.values(res.status)
 					for (let i = 0; i < values.length; i++) {
 						allValid = values[i] as boolean
@@ -56,7 +55,6 @@ export default class MyPlugin extends Plugin {
 							break
 						}
 					}
-					console.log(allValid)
 					if (allValid) {
 						new Notice('The selected file has been published with all selected publishers')
 					} else {
