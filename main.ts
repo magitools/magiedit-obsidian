@@ -4,18 +4,18 @@ import { ofetch } from "ofetch";
 
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
+interface MagieditPluginSettings {
 	url: string;
 	api_key: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
+const DEFAULT_SETTINGS: MagieditPluginSettings = {
 	url: 'https://magiedit.magitools.app',
 	api_key: ""
 }
 
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+export default class MagieditPlugin extends Plugin {
+	settings: MagieditPluginSettings;
 
 	async onload() {
 		await this.loadSettings();
@@ -120,9 +120,9 @@ export class PublisherSelectModal extends Modal {
 
 
 class MagieditSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+	plugin: MagieditPlugin;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: MagieditPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
