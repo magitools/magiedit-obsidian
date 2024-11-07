@@ -25,7 +25,7 @@ export default class MagieditPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'magiedit-publish',
-			name: 'Publish Selected Content',
+			name: 'Publish selected content',
 			editorCallback: async (editor: Editor, view: MarkdownView) => {
 				const { publishers } = await ofetch(`${this.settings.url}/api/publishers`, {
 					headers: {
@@ -133,7 +133,7 @@ class MagieditSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('Magiedit Url')
+			.setName('Magiedit URL')
 			.setDesc('change this if you self-host magiedit')
 			.addText(text => text
 				.setPlaceholder('Enter the url of your magiedit instance')
@@ -146,7 +146,7 @@ class MagieditSettingTab extends PluginSettingTab {
 			.setName('API Key')
 			.setDesc('Change to the API Key you created on your magiedit instance')
 			.addText(text => text
-				.setPlaceholder('Enter the api key you created  on your magiedit instance')
+				.setPlaceholder('Enter the API key you created  on your magiedit instance')
 				.setValue(this.plugin.settings.api_key)
 				.onChange(async (value) => {
 					this.plugin.settings.api_key = value;
