@@ -3,7 +3,7 @@
 	"name": "Magiedit",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Official plugin to interact with Magiedit's API",
+	"description": "Official integration for Magiedit's API",
 	"author": "Matteo Gassend",
 	"authorUrl": "https://matteogassend.com",
 	"isDesktopOnly": false
