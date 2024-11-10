@@ -1,5 +1,4 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, SuggestModal } from 'obsidian';
-import { ofetch } from "ofetch";
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, requestUrl, Setting } from 'obsidian';
 
 
 // Remember to rename these classes and interfaces!
@@ -27,28 +26,32 @@ export default class MagieditPlugin extends Plugin {
 			id: 'magiedit-publish',
 			name: 'Publish selected content',
 			editorCallback: async (editor: Editor, view: MarkdownView) => {
-				const { publishers } = await ofetch(`${this.settings.url}/api/publishers`, {
+				const res = await requestUrl({
+					url: `${this.settings.url}/api/publishers`,
 					headers: {
 						'Authorization': `Bearer ${this.settings.api_key}`
 					}
 				})
-				//TODO add title to frontmatter if not already available
+
+				const { publishers } = await res.json()				//TODO add title to frontmatter if not already available
 				new PublisherSelectModal(this.app, publishers, async (ev: Record<string, any>) => {
 					const title = view.file?.name.replace('.md', '')
 					const value = editor.getValue()
 					new Notice('Publishing article...')
-					const res = await ofetch(`${this.settings.url}/api/publishers/publish`, {
+					const res = await requestUrl({
+						url: `${this.settings.url}/api/publishers/publish`,
 						headers: {
 							'Authorization': `Bearer ${this.settings.api_key}`
 						},
 						method: 'POST',
-						body: {
+						body: JSON.stringify({
 							'content': value,
 							'publishers': Object.keys(ev)
-						}
+						})
 					})
 					let allValid = true
-					const values = Object.values(res.status)
+					const data = await res.json()
+					const values = Object.values(data.status)
 					for (let i = 0; i < values.length; i++) {
 						allValid = values[i] as boolean
 						if (!allValid) {
