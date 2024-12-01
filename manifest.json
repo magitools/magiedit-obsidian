@@ -1,7 +1,7 @@
 {
 	"id": "magiedit",
 	"name": "Magiedit",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Official integration for Magiedit's API",
 	"author": "Matteo Gassend",
